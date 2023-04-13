@@ -1,0 +1,19 @@
+- name: Check if Homebrew is installed on macOS
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check if Homebrew is installed
+      ansible.builtin.command: brew --version
+      register: brew_version
+      ignore_errors: yes
+
+    - name: Installs Homebrew
+      ansible.builtin.command: /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+      args:
+        executable: /bin/bash
+      when: brew_version.rc != 0
+
+    - name: Notify user if Homebrew was installed
+      ansible.builtin.debug:
+        msg: "Homebrew is already installed"
+      when: brew_version.rc == 0

@@ -1,3 +1,4 @@
+---
 - name: Check if Homebrew is installed on macOS
   hosts: localhost
   gather_facts: false

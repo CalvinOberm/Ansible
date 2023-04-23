@@ -1,0 +1,19 @@
+---
+- name: Install Xcode Command Line Tools
+  hosts: localhost
+  gather_facts: yes
+  become: yes
+  tasks:
+    - name: Check if Xcode Command Line Tools are installed
+      command: "xcode-select -p"
+      register: xcode_select_output
+      ignore_errors: yes
+
+    - name: Print message if Xcode Command Line Tools are already installed
+      debug:
+        msg: "Xcode Command Line Tools are already installed"
+      when: xcode_select_output.rc == 0
+
+    - name: Install Xcode Command Line Tools
+      command: "xcode-select --install"
+      when: xcode_select_output.rc != 0

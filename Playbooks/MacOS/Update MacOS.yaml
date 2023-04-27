@@ -1,0 +1,14 @@
+---
+- name: Update macOS
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Check if macOS update is available
+      shell: softwareupdate -l
+      register: macos_update
+      changed_when: false
+      failed_when: "'No new software available.' not in macos_update.stdout"
+
+    - name: Install macOS update
+      shell: softwareupdate -ia
+      when: "'No new software available.' not in macos_update.stdout"
